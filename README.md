@@ -33,7 +33,7 @@ limitations under the License.
 
 [![NPM version][npm-image]][npm-url] [![Build Status][test-image]][test-url] [![Coverage Status][coverage-image]][coverage-url] <!-- [![dependencies][dependencies-image]][dependencies-url] -->
 
-> Return the index of the first element in a strided array which is greater than or equal to a specified search element.
+> Return the first index of an element in a strided array which is greater than or equal to a specified search element.
 
 <!-- Section to include introductory text. Make sure to keep an empty line after the intro `section` element and another before the `/section` close. -->
 
@@ -45,43 +45,37 @@ limitations under the License.
 
 <!-- Package usage documentation. -->
 
+<section class="installation">
 
+## Installation
+
+```bash
+npm install @stdlib/blas-ext-base-gindex-of-greater-than-equal
+```
+
+Alternatively,
+
+-   To load the package in a website via a `script` tag without installation and bundlers, use the [ES Module][es-module] available on the [`esm`][esm-url] branch (see [README][esm-readme]).
+-   If you are using Deno, visit the [`deno`][deno-url] branch (see [README][deno-readme] for usage intructions).
+-   For use in Observable, or in browser/node environments, use the [Universal Module Definition (UMD)][umd] build available on the [`umd`][umd-url] branch (see [README][umd-readme]).
+
+The [branches.md][branches-url] file summarizes the available branches and displays a diagram illustrating their relationships.
+
+To view installation and usage instructions specific to each branch build, be sure to explicitly navigate to the respective README files on each branch, as linked to above.
+
+</section>
 
 <section class="usage">
 
 ## Usage
 
-To use in Observable,
-
 ```javascript
-gindexOfGreaterThanEqual = require( 'https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-gindex-of-greater-than-equal@umd/browser.js' )
-```
-
-To vendor stdlib functionality and avoid installing dependency trees for Node.js, you can use the UMD server build:
-
-```javascript
-var gindexOfGreaterThanEqual = require( 'path/to/vendor/umd/blas-ext-base-gindex-of-greater-than-equal/index.js' )
-```
-
-To include the bundle in a webpage,
-
-```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-gindex-of-greater-than-equal@umd/browser.js"></script>
-```
-
-If no recognized module system is present, access bundle contents via the global scope:
-
-```html
-<script type="text/javascript">
-(function () {
-    window.gindexOfGreaterThanEqual;
-})();
-</script>
+var gindexOfGreaterThanEqual = require( '@stdlib/blas-ext-base-gindex-of-greater-than-equal' );
 ```
 
 #### gindexOfGreaterThanEqual( N, searchElement, x, strideX )
 
-Returns the index of the first element in a strided array which is greater than or equal to a specified search element.
+Returns the first index of an element in a strided array which is greater than or equal to a specified search element.
 
 ```javascript
 var x = [ 0.0, 0.0, 1.0, 0.0 ];
@@ -94,10 +88,10 @@ The function has the following parameters:
 
 -   **N**: number of indexed elements.
 -   **searchElement**: search element.
--   **x**: input array.
+-   **x**: input [`Array`][mdn-array] or [`typed array`][mdn-typed-array].
 -   **strideX**: stride length.
 
-If the function is unable to find an element which is greater than or equal to a specified search element, the function returns `-1`.
+If the function is unable to find an element which is greater than or equal to the search element, the function returns `-1`.
 
 ```javascript
 var x = [ 0.0, 0.0, 0.0, 0.0 ];
@@ -109,10 +103,10 @@ var idx = gindexOfGreaterThanEqual( x.length, 1.0, x, 1 );
 The `N` and stride parameters determine which elements in the strided array are accessed at runtime. For example, to search every other element:
 
 ```javascript
-var x = [ 0.0, 9.0, 0.0, 9.0, 1.0, 9.0 ];
+var x = [ 0.0, 9.0, 1.0, 9.0, 0.0, 9.0 ];
 
 var idx = gindexOfGreaterThanEqual( 3, 1.0, x, 2 );
-// returns 2
+// returns 1
 ```
 
 Note that indexing is relative to the first index. To introduce an offset, use [`typed array`][mdn-typed-array] views.
@@ -120,20 +114,20 @@ Note that indexing is relative to the first index. To introduce an offset, use [
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-// Initial array...
+// Initial array:
 var x0 = new Float64Array( [ 0.0, 0.0, 0.0, 1.0, 0.0, 0.0 ] );
 
-// Create an offset view...
+// Create an offset view:
 var x1 = new Float64Array( x0.buffer, x0.BYTES_PER_ELEMENT*1 ); // start at 2nd element
 
-// Find index...
+// Find index:
 var idx = gindexOfGreaterThanEqual( 3, 1.0, x1, 2 );
 // returns 1
 ```
 
 #### gindexOfGreaterThanEqual.ndarray( N, searchElement, x, strideX, offsetX )
 
-Returns the index of the first element in a strided array which is greater than or equal to a specified search element using alternative indexing semantics.
+Returns the first index of an element in a strided array which is greater than or equal to a specified search element using alternative indexing semantics.
 
 ```javascript
 var x = [ 0.0, 0.0, 1.0, 0.0 ];
@@ -149,10 +143,10 @@ The function has the following additional parameters:
 While [`typed array`][mdn-typed-array] views mandate a view offset based on the underlying buffer, the offset parameter supports indexing semantics based on a starting index. For example, to access only the last three elements of the strided array:
 
 ```javascript
-var x = [ 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 2.0 ];
+var x = [ 0.0, 0.0, 1.0, 0.0 ];
 
-var idx = gindexOfGreaterThanEqual.ndarray( 3, 1.0, x, 1, x.length-3 );
-// returns 2
+var idx = gindexOfGreaterThanEqual.ndarray( 3, 1.0, x, 1, 1 );
+// returns 1
 ```
 
 </section>
@@ -165,7 +159,8 @@ var idx = gindexOfGreaterThanEqual.ndarray( 3, 1.0, x, 1, x.length-3 );
 
 ## Notes
 
--   When comparing elements, the function uses the greater-than-or-equal-to operator `>=`. As a consequence, comparisons involving `NaN` always evaluate to `false`, and `-0` and `+0` are considered the same.
+-   If `N <= 0`, both functions return `-1`.
+-   When comparing elements, the functions use the greater-than-or-equal operator `>=`. As a consequence, comparisons involving `NaN` always evaluate to `false`, and `-0` and `+0` are considered the same.
 -   Both functions support array-like objects having getter and setter accessors for array element access (e.g., [`@stdlib/array-base/accessor`][@stdlib/array/base/accessor]).
 
 </section>
@@ -180,27 +175,17 @@ var idx = gindexOfGreaterThanEqual.ndarray( 3, 1.0, x, 1, x.length-3 );
 
 <!-- eslint no-undef: "error" -->
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<body>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/random-array-discrete-uniform@umd/browser.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-gindex-of-greater-than-equal@umd/browser.js"></script>
-<script type="text/javascript">
-(function () {
+```javascript
+var discreteUniform = require( '@stdlib/random-array-discrete-uniform' );
+var gindexOfGreaterThanEqual = require( '@stdlib/blas-ext-base-gindex-of-greater-than-equal' );
 
-var x = discreteUniform( 10, -100, 100, {
+var x = discreteUniform( 10, 0, 3, {
     'dtype': 'generic'
 });
 console.log( x );
 
-var idx = gindexOfGreaterThanEqual( x.length, 80.0, x, 1 );
+var idx = gindexOfGreaterThanEqual( x.length, 2.0, x, 1 );
 console.log( idx );
-
-})();
-</script>
-</body>
-</html>
 ```
 
 </section>
@@ -241,11 +226,6 @@ For more information on the project, filing bug reports and feature requests, an
 [![Chat][chat-image]][chat-url]
 
 ---
-
-## License
-
-See [LICENSE][stdlib-license].
-
 
 ## Copyright
 
@@ -293,11 +273,11 @@ Copyright &copy; 2016-2026. The Stdlib [Authors][stdlib-authors].
 [esm-readme]: https://github.com/stdlib-js/blas-ext-base-gindex-of-greater-than-equal/blob/esm/README.md
 [branches-url]: https://github.com/stdlib-js/blas-ext-base-gindex-of-greater-than-equal/blob/main/branches.md
 
-[stdlib-license]: https://raw.githubusercontent.com/stdlib-js/blas-ext-base-gindex-of-greater-than-equal/main/LICENSE
+[mdn-array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
 
 [mdn-typed-array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
 
-[@stdlib/array/base/accessor]: https://github.com/stdlib-js/array-base-accessor/tree/umd
+[@stdlib/array/base/accessor]: https://github.com/stdlib-js/array-base-accessor
 
 </section>
 
